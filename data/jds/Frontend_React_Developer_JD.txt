@@ -1,0 +1,6 @@
+Role: Frontend React Developer
+
+Description:
+Frontend Developer needed to build responsive UIs. Minimum 2 years of experience with React and TypeScript. Knowledge of state management (Redux) and modern CSS frameworks is essential.
+
+Required Skills: JavaScript, React, Redux, TypeScript

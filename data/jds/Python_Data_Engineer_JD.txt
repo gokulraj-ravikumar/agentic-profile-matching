@@ -1,0 +1,6 @@
+Role: Python Data Engineer
+
+Description:
+Seeking a Data Engineer to build scalable ETL pipelines. Must have 3+ years of Python experience, strong SQL skills, and familiarity with data warehousing (Snowflake/Redshift).
+
+Required Skills: Python, Pandas, PySpark, SQL

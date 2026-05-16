@@ -1,0 +1,6 @@
+Role: DevOps Engineer
+
+Description:
+Looking for a DevOps professional to manage cloud infrastructure. Requires 4+ years experience with Kubernetes, CI/CD pipelines (Jenkins), and Infrastructure as Code (Terraform).
+
+Required Skills: Linux, Docker, Kubernetes, Jenkins

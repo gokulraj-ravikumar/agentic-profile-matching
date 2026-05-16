@@ -1,0 +1,6 @@
+Role: Java Backend Engineer
+
+Description:
+Looking for a strong Backend Engineer with 4+ years of experience. Must have deep expertise in Java, Spring Boot, and Hibernate. Experience with Microservices architecture and database design is required.
+
+Required Skills: Java, Spring Boot, Spring Data JPA, Hibernate
