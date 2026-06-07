@@ -281,8 +281,11 @@ class JobMatcherEngine:
 		for required_skill in required_skills:
 			if required_skill in candidate_skills:
 				continue
-			if required_skill and required_skill not in candidate_text.lower():
-				return False
+			if required_skill:
+				escaped_skill = re.escape(required_skill)
+				pattern = r'(?:^|[^a-zA-Z0-9_])' + escaped_skill + r'(?:[^a-zA-Z0-9_]|$)'
+				if not re.search(pattern, candidate_text.lower()):
+					return False
 
 		return True
 
@@ -427,8 +430,6 @@ class JobMatcherEngine:
 			"matched_skills": matched_skills,
 			"relevant_excerpts": relevant_excerpts,
 			"reasoning": reasoning,
-			"years_of_experience": candidate_experience,
-			"all_skills": list(candidate_skills),
 		}
 
 	def match_jobs(

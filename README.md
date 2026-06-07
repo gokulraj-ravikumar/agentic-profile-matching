@@ -1,67 +1,84 @@
-# Agentic Profile Matching
+# Agentic Profile Matching 
 
-A LangGraph-based resume matching project that lets you describe a role in natural language, rank resumes from the local Chroma index, compare candidates, and refine the search mid-conversation.
+An advanced AI-powered resume matching application built with **LangGraph**, **LangChain**, and **ChromaDB**. This agent automates the recruitment screening process by taking natural language job descriptions, extracting requirements, and searching through a local repository of resumes to find the best candidates.
 
-## What this project does
+## Features
 
-- Parses a job description or a free-form request into structured requirements.
-- Searches the resume index with semantic retrieval and scoring.
-- Produces a ranked shortlist with reasoning, gaps, and screening questions.
-- Supports follow-up queries like comparisons, explanations, and requirement changes.
-- Preserves conversation history in the Streamlit app so the agent can re-rank after refinement.
+- **Agentic Workflow**: A state-driven LangGraph architecture that automatically parses job descriptions, searches resumes, ranks candidates, and generates a side-by-side comparison report.
+- **Multi-Round Screening**: Simulates a multi-round interview process, identifying top candidates, providing a deep-dive analysis, and outputting actionable Hire/No-Hire recommendations.
+- **RAG-based Resume Search**: Uses OpenAI Embeddings and ChromaDB to semantically search and match resumes against must-have skills and required experience.
+- **Conversational Refinement**: Allows recruiters to iteratively refine job requirements via natural language feedback.
+- **Dual Interfaces**: Choose between a lightweight Command Line Interface (CLI) or an interactive Web UI (Streamlit).
 
-## Why both `resume_rag.py` and `job_matcher.py` exist
+## Prerequisites
 
-- `resume_rag.py` builds and refreshes the persistent Chroma index from `data/resumes`.
-- `job_matcher.py` queries that index, scores candidates, and returns the top matches.
-- `matching_agent.py` orchestrates those pieces with LangGraph and adds comparison, interview-question, and feedback logic.
+- Python 3.9+
+- OpenAI API Key
 
-## State Machine
+## Setup Instructions
 
-```mermaid
-stateDiagram-v2
-    [*] --> ParseJD: User Input
-    ParseJD --> ExtractRequirements
-    ExtractRequirements --> SearchResumes: Apply Filters
-    SearchResumes --> RankCandidates: Multi-Round Screen
-    RankCandidates --> GenerateReport
-    GenerateReport --> HumanFeedback: Review Results
-    HumanFeedback --> ExtractRequirements: Adjust Requirements
-    HumanFeedback --> [*]: Finalize Hiring
-```
+1. **Clone or Download the Repository**
+   Ensure you are in the project root folder: `agentic-profile-matching`.
 
-## Project Files
+2. **Set up the Virtual Environment**
+   To avoid dependency conflicts, create and activate a virtual environment:
+   ```powershell
+   python -m venv venv
+   
+   # Note: If you get a PowerShell Execution Policy error, run this first:
+   # Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+   
+   .\venv\Scripts\Activate.ps1
+   ```
 
-- `app.py` - Streamlit chat interface.
-- `matching_agent.py` - LangGraph workflow, requirement extraction, comparison helpers, and report generation.
-- `job_matcher.py` - Resume ranking engine backed by ChromaDB.
-- `resume_rag.py` - Resume ingestion and index building pipeline.
-- `fs_tools.py` - File read, list, write, and search helpers.
+3. **Install Dependencies**
+   Install the required Python packages:
+   ```powershell
+   pip install -r requirements.txt
+   ```
 
-## Setup
+4. **Configure Environment Variables**
+   Open the `.env` file in the root directory and add your OpenAI API Key:
+   ```text
+   OPENAI_API_KEY="sk-..."
+   ```
 
-1. Install the dependencies from `requirements.txt`.
-2. Set `OPENAI_API_KEY` in your environment.
-3. Ensure `data/resumes` contains the resume files you want indexed.
-4. If you update resumes, rebuild the index with `python resume_rag.py`.
+## Usage Instructions
 
-## Run the app
+Before searching for candidates, the agent needs to index the resumes in `data/resumes/` into a vector database (ChromaDB). 
 
-```bash
-streamlit run app.py
-```
+### Option 1: Command Line Interface (CLI)
 
-## Example prompts
+1. Activate your virtual environment (if not already activated):
+   ```powershell
+   .\venv\Scripts\Activate.ps1
+   ```
+2. Run the CLI app:
+   ```powershell
+   python cli_app.py
+   ```
+3. **On your first run:** Select `Option 1` to process the resumes into the Vector DB.
+4. **On subsequent runs:** Select `Option 2` to start the conversational agent. Paste a job description or state your requirements (e.g., "Find me QA engineers with Python experience") and interact with the agent!
 
-- `Find me candidates with React and 3+ years experience`
-- `Compare the top 3 matches side by side`
-- `Why did John rank higher than Jane?`
-- `Adjust the search to prioritize Python, Airflow, and cloud experience`
-- `Generate interview questions for the top candidate`
+### Option 2: Streamlit Web UI
 
+1. Activate your virtual environment:
+   ```powershell
+   .\venv\Scripts\Activate.ps1
+   ```
+2. Start the Streamlit server:
+   ```powershell
+   streamlit run streamlit_app.py
+   ```
+3. **On your first run:** Look at the left sidebar and click **"Process Resumes into Vector DB"**. Wait for the success message.
+4. Use the chat interface to paste your job description and converse with the agent. You can ask follow-up questions like "Why did you pick the top candidate?" or refine your search by saying "Actually, they must have 5 years of experience."
 
-## Notes
+## Project Structure
 
-- The project uses the local `chroma_db` folder for persistence.
-- If the resume index becomes stale, rerun the ingestion pipeline before testing.
-- The helper file contains the step-by-step workflow and submission guidance.
+- `matching_agent.py` - Compiles the LangGraph state machine.
+- `state.py` - Defines the core memory and variables tracked by the agent.
+- `nodes.py` - The operational steps of the agent (parsing, searching, ranking, reporting).
+- `tools.py` - LLM functions and database handlers available to the agent.
+- `cli_app.py` / `streamlit_app.py` - User interfaces.
+- `generate_resumes.py` - A utility script to generate dummy IT resumes.
+- `data/resumes/` - The directory containing candidate resumes (PDF, DOCX, TXT).
